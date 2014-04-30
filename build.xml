@@ -51,11 +51,18 @@
     <delete dir="${dist}"/>
   </target>
     	
-  <target name="run" depends="compile"
+  <target name="run0" depends="compile"
 	    description="run" >
 	    <java classname="${main}" fork="true">
 			<classpath refid="project.classpath"/>
 	    	<arg value="${base}.tests.Test0"/>
 		</java>
 	  </target>
+	<target name="run1" depends="compile"
+		    description="run" >
+		    <java classname="${main}" fork="true">
+				<classpath refid="project.classpath"/>
+		    	<arg value="${base}.tests.Test1"/>
+			</java>
+		  </target>
 </project>
