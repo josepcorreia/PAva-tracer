@@ -15,7 +15,6 @@
   </path>
   	
   <path id="project.classpath">
-  	<pathelement location="${src}"/>
   	<pathelement location="${build}"/>
   	<path refid="external.jars" />
   </path>

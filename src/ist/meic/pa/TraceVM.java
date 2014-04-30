@@ -1,20 +1,32 @@
 package ist.meic.pa;
 
+import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;
+import javassist.Loader;
 import javassist.NotFoundException;
+import javassist.Translator;
 
 public class TraceVM {
 	public static void main(String[] args){
 		
-		ClassPool pool = ClassPool.getDefault();
-		CtClass cc = null;
+		ClassPool cp = ClassPool.getDefault();
+		Loader l = new Loader(cp);
+		Translator t =  new TranslatorVM();
 		try {
-			if(args[0] != null) {				
-				cc = pool.get(args[0]);
-			}
-			System.out.println(cc);
-		} catch (NotFoundException e) {
+			l.addTranslator(cp,t);
+		} catch (NotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (CannotCompileException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		String[] restArgs = new String[args.length-1];
+		System.arraycopy(args, 1, restArgs, 0, restArgs.length);
+		try {
+			l.run(args[0], restArgs);
+			} catch (Throwable e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
