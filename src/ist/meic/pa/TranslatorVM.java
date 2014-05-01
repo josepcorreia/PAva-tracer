@@ -11,6 +11,7 @@ import javassist.bytecode.CodeAttribute;
 import javassist.bytecode.CodeIterator;
 import javassist.bytecode.MethodInfo;
 import javassist.bytecode.Mnemonic;
+import javassist.expr.MethodCall;
 
 public class TranslatorVM implements Translator {
 
@@ -25,25 +26,18 @@ public class TranslatorVM implements Translator {
 			if(arg1 != null) {				
 				cc = arg0.get(arg1);
 			}
-		
-			CtMethod method = cc.getDeclaredMethod("foo");
-			MethodInfo minfo = method.getMethodInfo();
-			CodeAttribute ca = minfo.getCodeAttribute();
-			CodeIterator ci = ca.iterator() ;
-			while (ci.hasNext()) {
-			    int index = ci.next();
-			    int op = ci.byteAt(index);
-			    System.err.println(Mnemonic.OPCODE[op]);
-			}
+			
+			CtMethod[] methods = cc.getDeclaredMethods();
+				for(CtMethod m : methods){
+					System.err.println(m.toString());
+				}
+			
+				
 		} catch (NotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (BadBytecode e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-
 	@Override
 	public void start(ClassPool arg0) throws NotFoundException,
 			CannotCompileException {

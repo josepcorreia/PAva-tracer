@@ -1,12 +1,10 @@
 package ist.meic.pa.tests;
-
 import ist.meic.pa.Trace;
-
 import java.util.*;
 
 class TestC2 {
 
-    Map m = new HashMap();
+	Map m = new HashMap();
 
     public Object identity(Object o) {
         return o;
