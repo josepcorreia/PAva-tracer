@@ -13,10 +13,7 @@ public class Trace {
 	}
 
 	public static void addInfo(Object o, String s){
-		// TODO Descobrir o bug que substitui o objecto actual pelo novo
-		System.err.println("Antes " + info);
 		info.get(o).add(s);
-		System.err.println("Depois" + info);
 	}
 
 	public static void print(Object o){
