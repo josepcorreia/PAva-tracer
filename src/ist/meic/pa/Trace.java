@@ -1,20 +1,24 @@
 package ist.meic.pa;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.IdentityHashMap;
 
 public class Trace {
-	private static HashMap<Object, ArrayList<String>> info = new HashMap<Object, ArrayList<String>>();
-	
+	private static IdentityHashMap<Object, ArrayList<String>> info = new IdentityHashMap<Object, ArrayList<String>>();
+
 	public static void addObject(Object o){
-		info.put(o, new ArrayList<String>());
+		if(!info.containsKey(o)){
+			info.put(o, new ArrayList<String>());
+		}
 	}
-	
+
 	public static void addInfo(Object o, String s){
 		// TODO Descobrir o bug que substitui o objecto actual pelo novo
+		System.err.println("Antes " + info);
 		info.get(o).add(s);
+		System.err.println("Depois" + info);
 	}
-	
+
 	public static void print(Object o){
 		if(!info.containsKey(o))
 			System.err.println("Tracing for " + o.toString() + " is nonexistent!");		
