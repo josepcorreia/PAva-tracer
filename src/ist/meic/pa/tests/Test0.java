@@ -5,6 +5,7 @@ import ist.meic.pa.Trace;
 
 class TestC0 {
 	public Object foo() {
+		System.err.println("oi");
 		return new String("Foo");
 	}
 	public Object bar() {

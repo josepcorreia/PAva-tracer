@@ -3,6 +3,8 @@ package ist.meic.pa;
 import java.util.ArrayList;
 import java.util.IdentityHashMap;
 
+import javassist.CtClass;
+
 public class Trace {
 	private static IdentityHashMap<Object, ArrayList<String>> info = new IdentityHashMap<Object, ArrayList<String>>();
 
@@ -14,6 +16,7 @@ public class Trace {
 
 	public static void addInfo(Object o, String s){
 		info.get(o).add(s);
+		System.err.println(info);
 	}
 
 	public static void print(Object o){
@@ -25,5 +28,13 @@ public class Trace {
 				System.err.println(s);
 			}
 		}
-	}	
+	}
+	
+	
+	// THE HORROR!! REMOVE ASAP
+	public static String getMethod(Object o) {
+		if(o != null)
+		System.err.println(o.getClass());
+		return null;
+	}
 }

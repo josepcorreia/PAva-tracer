@@ -19,8 +19,6 @@ public class TranslatorVM implements Translator {
 	@Override
 	public void onLoad(ClassPool arg0, String arg1) throws NotFoundException,
 	CannotCompileException {
-		// TODO Auto-generated method stub
-		System.err.println("A carregar a classe: "+ arg1);
 
 		CtClass cc = null;
 		try {
@@ -37,11 +35,19 @@ public class TranslatorVM implements Translator {
 									throws CannotCompileException
 									{
 								int line = m.getLineNumber();
-								String template = "{  if($args.length > 0) { ist.meic.pa.Trace.addObject($args[0]); " +
-										"ist.meic.pa.Trace.addInfo($args[0], \"->\" +"+ line+");} " +
-										"$_ = $proceed($$); " +
-										"if($_ != null){ ist.meic.pa.Trace.addObject($_); " +
-										"ist.meic.pa.Trace.addInfo($_, \"<-\"+"+line+");}}";
+								String template = null;
+								try {
+									template = "{  if($args.length > 0) { ist.meic.pa.Trace.addObject($args[0]); " +
+											"ist.meic.pa.Trace.addInfo($args[0], \"-> " + m.getMethod().getLongName() +
+											" on " + m.getFileName() + ":" + line + "\");} " +
+											"$_ = $proceed($$); " +
+											"if($_ != null){ ist.meic.pa.Trace.addObject($_); " +
+											"ist.meic.pa.Trace.addInfo($_, \"<- " + m.getMethod().getLongName() + 
+											" on " + m.getFileName() + ":" + line + "\");}}";
+								} catch (NotFoundException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
 								
 								m.replace(template);
 									}
