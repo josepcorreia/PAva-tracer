@@ -29,7 +29,6 @@ public class TranslatorVM implements Translator {
 			}
 			if(cc.getName().equals("ist.meic.pa.Trace"))
 				return;
-
 			CtMethod[] methods = cc.getDeclaredMethods();
 			for(CtMethod m : methods){
 				m.instrument(
@@ -37,11 +36,14 @@ public class TranslatorVM implements Translator {
 							public void edit(MethodCall m)
 									throws CannotCompileException
 									{
-								m.replace("{  if($args.length > 0) { ist.meic.pa.Trace.addObject($args[0]); " +
-										"ist.meic.pa.Trace.addInfo($args[0], \"->\");} " +
+								int line = m.getLineNumber();
+								String template = "{  if($args.length > 0) { ist.meic.pa.Trace.addObject($args[0]); " +
+										"ist.meic.pa.Trace.addInfo($args[0], \"->\" +"+ line+");} " +
 										"$_ = $proceed($$); " +
 										"if($_ != null){ ist.meic.pa.Trace.addObject($_); " +
-										"ist.meic.pa.Trace.addInfo($_, \"<-\");}}");
+										"ist.meic.pa.Trace.addInfo($_, \"<-\"+"+line+");}}";
+								
+								m.replace(template);
 									}
 						});
 			}
