@@ -9,7 +9,7 @@ public class Util {
 			for(int i=0; i < args.length; i++){ 
 				if(!args[i].getClass().isPrimitive()){
 					ist.meic.pa.Trace.addObject(args[i]);
-					ist.meic.pa.Trace.addInfo(args[i], "->" + methodname + " on " + filename + ":" + line);
+					ist.meic.pa.Trace.addInfo(args[i], "-> " + methodname + " on " + filename + ":" + line);
 				}
 			}
 		 }
@@ -19,6 +19,10 @@ public class Util {
 			ist.meic.pa.Trace.addObject(ret); 
 			ist.meic.pa.Trace.addInfo(ret, "<- " + methodname +" on " + filename + ":" + line);
 		}
+	}
+	public static void processReturn(boolean ret, String filename, String methodname, String line){
+			ist.meic.pa.Trace.addObject(ret); 
+			ist.meic.pa.Trace.addInfo(ret, "<- " + methodname +" on " + filename + ":" + line);
 	}
 }
 

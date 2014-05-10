@@ -3,6 +3,7 @@ package ist.meic.pa;
 import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;
+import javassist.CtConstructor;
 import javassist.CtMethod;
 import javassist.NotFoundException;
 import javassist.Translator;
@@ -13,6 +14,7 @@ import javassist.bytecode.MethodInfo;
 import javassist.bytecode.Mnemonic;
 import javassist.expr.ExprEditor;
 import javassist.expr.MethodCall;
+import javassist.expr.NewExpr;
 
 public class TranslatorVM implements Translator {
 
@@ -48,6 +50,24 @@ public class TranslatorVM implements Translator {
 									// TODO Auto-generated catch block
 									e.printStackTrace();
 								}
+
+									}
+						});
+				m.instrument(
+						new ExprEditor() {
+							public void edit(NewExpr ne)
+									throws CannotCompileException
+									{
+								int line = ne.getLineNumber();
+
+								String filename = ne.getFileName();
+								String methodname = ne.getClassName();
+								String template = null;
+
+								template ="{ist.meic.pa.Util.processArguments($args, \"" + filename + "\",\"" + methodname + "\",\"" + line + "\");"
+										+"$_ = $proceed($$);"
+										+ "ist.meic.pa.Util.processReturn($_,\""+ filename +"\",\"" + methodname + "\",\"" + line + "\");}";
+								ne.replace(template);
 
 									}
 						});
