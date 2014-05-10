@@ -19,7 +19,7 @@ class TestC2 {
 
         Trace.print(o);
 
-        /*for (Object obj : m.values()) {
+       /* for (Object obj : m.values()) {
             System.out.println(obj);
         }*/
 
