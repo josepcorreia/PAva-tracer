@@ -25,7 +25,7 @@ public class TranslatorVM implements Translator {
 			if(arg1 != null) {				
 				cc = arg0.get(arg1);
 			}
-			if(cc.getName().equals("ist.meic.pa.Trace"))
+			if(cc.getName().equals("ist.meic.pa.Trace") || cc.getName().equals("ist.meic.pa.Util") )
 				return;
 			CtMethod[] methods = cc.getDeclaredMethods();
 			for(CtMethod m : methods){
@@ -35,21 +35,20 @@ public class TranslatorVM implements Translator {
 									throws CannotCompileException
 									{
 								int line = m.getLineNumber();
-								String template = null;
 								try {
-									template = "{  if($args.length > 0) { ist.meic.pa.Trace.addObject($args[0]); " +
-											"ist.meic.pa.Trace.addInfo($args[0], \"-> " + m.getMethod().getLongName() +
-											" on " + m.getFileName() + ":" + line + "\");} " +
-											"$_ = $proceed($$); " +
-											"if($_ != null){ ist.meic.pa.Trace.addObject($_); " +
-											"ist.meic.pa.Trace.addInfo($_, \"<- " + m.getMethod().getLongName() + 
-											" on " + m.getFileName() + ":" + line + "\");}}";
+									String filename = m.getFileName();
+									String methodname = m.getMethod().getLongName();
+									String template = null;
+
+									template ="{ist.meic.pa.Util.processArguments($args, \"" + filename + "\",\"" + methodname + "\",\"" + line + "\");"
+											+"$_ = $proceed($$);"
+											+ "ist.meic.pa.Util.processReturn($_,\""+ filename +"\",\"" + methodname + "\",\"" + line + "\");}";
+									m.replace(template);
 								} catch (NotFoundException e) {
 									// TODO Auto-generated catch block
 									e.printStackTrace();
 								}
-								
-								m.replace(template);
+
 									}
 						});
 			}

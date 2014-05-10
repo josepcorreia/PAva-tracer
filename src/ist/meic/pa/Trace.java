@@ -15,8 +15,15 @@ public class Trace {
 	}
 
 	public static void addInfo(Object o, String s){
-		info.get(o).add(s);
-		System.err.println(info);
+		if(info.containsKey(o)){
+			info.get(o).add(s);
+			//System.err.println(info);
+		}
+		else{
+			System.err.println(o.getClass());
+			info.put(o, new ArrayList<String>());
+			info.get(o).add(s);
+		}
 	}
 
 	public static void print(Object o){
