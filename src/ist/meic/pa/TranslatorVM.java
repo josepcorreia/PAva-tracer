@@ -24,11 +24,7 @@ public class TranslatorVM implements Translator {
 			}
 			if(cc.getName().equals("ist.meic.pa.Trace") || cc.getName().equals("ist.meic.pa.Util") )
 				return;
-			CtField[] fields = cc.getDeclaredFields();
-			for(CtField f : fields) {
-				System.err.println(f);
-			}
-
+			
 			CtMethod[] methods = cc.getDeclaredMethods();
 			for(CtMethod m : methods){
 				m.instrument(
