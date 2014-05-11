@@ -24,61 +24,72 @@ public class TranslatorVM implements Translator {
 			}
 			if(cc.getName().equals("ist.meic.pa.Trace") || cc.getName().equals("ist.meic.pa.Util") )
 				return;
-			
+
 			CtMethod[] methods = cc.getDeclaredMethods();
 			for(CtMethod m : methods){
 				m.instrument(
-						new ExprEditor() {
-							public void edit(MethodCall m)
-									throws CannotCompileException
-									{
-								int line = m.getLineNumber();
-								try {
-									String filename = m.getFileName();
-									String methodname = m.getMethod().getLongName();
-									String template = null;
-
-									template ="{ist.meic.pa.Util.processArguments($args, \"" + filename + "\",\"" + methodname + "\",\"" + line + "\");"
-											+"$_ = $proceed($$);"
-											+ "ist.meic.pa.Util.processReturn($_,\""+ filename +"\",\"" + methodname + "\",\"" + line + "\");}";
-									m.replace(template);
-								} catch (NotFoundException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}
-
-									}
-						});
+						methodCallInstrumentation());
 				m.instrument(
-						new ExprEditor() {
-							public void edit(NewExpr ne)
-									throws CannotCompileException
-									{
-								int line = ne.getLineNumber();
-
-								String filename = ne.getFileName();
-								String methodname = null;
-								try {
-									methodname = ne.getConstructor().getLongName();
-								} catch (NotFoundException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}
-								String template = null;
-
-								template ="{ist.meic.pa.Util.processArguments($args, \"" + filename + "\",\"" + methodname + "\",\"" + line + "\");"
-										+"$_ = $proceed($$);"
-										+ "ist.meic.pa.Util.processReturn($_,\""+ filename +"\",\"" + methodname + "\",\"" + line + "\");}";
-								ne.replace(template);
-
-									}
-						});
+						instantiationInstrumentation());
 			}
 		} catch (NotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
+
+	/**
+	 * @return
+	 */
+	private ExprEditor instantiationInstrumentation() {
+		return new ExprEditor() {
+			public void edit(NewExpr ne)
+					throws CannotCompileException
+					{
+				
+				int line = ne.getLineNumber();
+				String fileName = ne.getFileName();
+				String constructorName = null;
+				
+				try {
+					constructorName = ne.getConstructor().getLongName();
+				} catch (NotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				String template = null;
+
+				template = Util.generateTemplate(fileName, constructorName, line);
+				ne.replace(template);
+					}
+		};
+	}
+
+	/**
+	 * @return
+	 */
+	private ExprEditor methodCallInstrumentation() {
+		return new ExprEditor() {
+			public void edit(MethodCall m)
+					throws CannotCompileException
+					{
+				int line = m.getLineNumber();
+				try {
+					String filename = m.getFileName();
+					String methodname = m.getMethod().getLongName();
+					String template = null;
+
+					template = Util.generateTemplate(filename, methodname, line);
+					m.replace(template);
+				} catch (NotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+					}
+		};
+	}
+
 	@Override
 	public void start(ClassPool arg0) throws NotFoundException,
 	CannotCompileException {
