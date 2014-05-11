@@ -3,15 +3,10 @@ package ist.meic.pa;
 import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;
-import javassist.CtConstructor;
+import javassist.CtField;
 import javassist.CtMethod;
 import javassist.NotFoundException;
 import javassist.Translator;
-import javassist.bytecode.BadBytecode;
-import javassist.bytecode.CodeAttribute;
-import javassist.bytecode.CodeIterator;
-import javassist.bytecode.MethodInfo;
-import javassist.bytecode.Mnemonic;
 import javassist.expr.ExprEditor;
 import javassist.expr.MethodCall;
 import javassist.expr.NewExpr;
@@ -29,6 +24,11 @@ public class TranslatorVM implements Translator {
 			}
 			if(cc.getName().equals("ist.meic.pa.Trace") || cc.getName().equals("ist.meic.pa.Util") )
 				return;
+			CtField[] fields = cc.getDeclaredFields();
+			for(CtField f : fields) {
+				System.err.println(f);
+			}
+
 			CtMethod[] methods = cc.getDeclaredMethods();
 			for(CtMethod m : methods){
 				m.instrument(
@@ -61,7 +61,13 @@ public class TranslatorVM implements Translator {
 								int line = ne.getLineNumber();
 
 								String filename = ne.getFileName();
-								String methodname = ne.getClassName();
+								String methodname = null;
+								try {
+									methodname = ne.getConstructor().getLongName();
+								} catch (NotFoundException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
 								String template = null;
 
 								template ="{ist.meic.pa.Util.processArguments($args, \"" + filename + "\",\"" + methodname + "\",\"" + line + "\");"
