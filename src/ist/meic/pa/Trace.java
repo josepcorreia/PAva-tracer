@@ -3,19 +3,14 @@ package ist.meic.pa;
 import java.util.ArrayList;
 import java.util.IdentityHashMap;
 
-import javassist.CtClass;
-
 public class Trace {
 	private static IdentityHashMap<Object, ArrayList<String>> info = new IdentityHashMap<Object, ArrayList<String>>();
 
 	public static void addInfo(Object o, String s){
-		if(info.containsKey(o)){
-			info.get(o).add(s);
-		}
-		else{
+		if(!info.containsKey(o)){
 			info.put(o, new ArrayList<String>());
-			info.get(o).add(s);
 		}
+		info.get(o).add(s);
 	}
 
 	public static void print(Object o){

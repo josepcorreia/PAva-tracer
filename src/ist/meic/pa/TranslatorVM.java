@@ -2,6 +2,7 @@ package ist.meic.pa;
 
 import javassist.CannotCompileException;
 import javassist.ClassPool;
+import javassist.CtBehavior;
 import javassist.CtClass;
 import javassist.CtField;
 import javassist.CtMethod;
@@ -25,8 +26,8 @@ public class TranslatorVM implements Translator {
 			if(cc.getName().equals("ist.meic.pa.Trace") || cc.getName().equals("ist.meic.pa.Util") )
 				return;
 
-			CtMethod[] methods = cc.getDeclaredMethods();
-			for(CtMethod m : methods){
+			CtBehavior[] behaviors = cc.getDeclaredBehaviors();
+			for(CtBehavior m : behaviors){
 				m.instrument(
 						methodCallInstrumentation());
 				m.instrument(

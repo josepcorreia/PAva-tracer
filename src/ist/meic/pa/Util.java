@@ -51,5 +51,16 @@ public class Util {
 	public static void processReturn(byte ret, String filename, String methodname, String line){
 		// DO NOTHING
 	}
+	
+	public static String generateExceptionTemplate(String filename, String methodname, int line) {
+		return "{ ist.meic.pa.Util.processException($1,\""+ filename +"\",\"" + methodname + "\",\"" + line + "\");}";
+	}
+	
+	public static void processException(Object caughtObj, String filename, String methodname, String line){
+		if(caughtObj != null){ 
+			ist.meic.pa.Trace.addInfo(caughtObj, "  !! " + methodname +" on " + filename + ":" + line);
+		}
+	}
+
 }
 
