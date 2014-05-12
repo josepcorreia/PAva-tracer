@@ -62,5 +62,39 @@ public class Util {
 		}
 	}
 
+	public static String generateCastTemplate(String filename,
+			String methodname, int line) {
+		return "{ ist.meic.pa.Util.processCast($args, $1, $_ ,\"" + filename + "\",\"" + methodname + "\",\"" + line + "\");"
+				+"$_ = $proceed($$);}";
+	}
+	
+	public static void processCast(Object[] args, Object from, Object to, String filename, String methodname, String line){
+		if(args.length > 0) { 
+			ist.meic.pa.Trace.addInfo(args[0], "  being cast from " + from.getClass().getCanonicalName() + " to " + to + " at " + methodname +" on " + filename + ":" + line);
+		}
+	}
+	
+	public static String generateFieldReadTemplate(String filename, String fieldname, String methodname, int line) {
+		return "{ ist.meic.pa.Util.processFieldRead($_,\""+ filename +"\",\"" + fieldname +"\",\"" + methodname + "\",\"" + line + "\");"
+				+"$_ = $proceed($$);}";
+	}
+	
+	public static void processFieldRead(Object readObj, String filename, String fieldname, String methodname, String line){
+		if(readObj != null){ 
+			ist.meic.pa.Trace.addInfo(readObj, "  read from field " + fieldname + " on " + filename + ":" + line);
+		}
+	}
+	
+	public static String generateFieldWriteTemplate(String filename, String fieldname, String methodname, int line) {
+		return "{ ist.meic.pa.Util.processFieldWrite($1,\""+ filename +"\",\"" + fieldname +"\",\"" + methodname + "\",\"" + line + "\");"
+				+"$_ = $proceed($$);}";
+	}
+	
+	public static void processFieldWrite(Object writtenObj, String filename, String fieldname, String methodname, String line){
+		if(writtenObj != null){ 
+			ist.meic.pa.Trace.addInfo(writtenObj, "  written on field " + fieldname + " on " + filename + ":" + line);
+		}
+	}
+
 }
 

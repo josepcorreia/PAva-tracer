@@ -2,7 +2,9 @@ import ist.meic.pa.Trace;
 
 import java.util.*;
 
-class throwableObj extends Throwable {
+class ThrowableObj extends Throwable {
+	String s = "lol";
+	Object oo;
 	public String toString(){
 		return "I'm a throwable!";
 	}
@@ -16,13 +18,17 @@ class Test {
 
     public void test() {
         Object o = new String("MyObj");
-        Throwable to = new throwableObj();
+        ThrowableObj to = new ThrowableObj();
 
         identity(o);
+        o = new String(to.s);
+        to.oo = o;
 
         Trace.print(o);
+        
 
-	    try {
+	    Throwable t = (Throwable)to;
+        try {
 	    	throw to;
 	        
         
@@ -30,6 +36,7 @@ class Test {
         	identity(ex);
         }
 	    Trace.print(to);
+	    Trace.print(t);
         
     }
 }
